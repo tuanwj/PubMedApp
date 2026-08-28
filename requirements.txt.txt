@@ -1,0 +1,6 @@
+streamlit
+pandas
+biopython
+requests
+openpyxl
+pubmed_search
