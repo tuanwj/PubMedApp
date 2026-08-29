@@ -1,8 +1,6 @@
 streamlit
 pandas
-datetime
 biopython
-io
 requests
 openpyxl
 pubmed_search
