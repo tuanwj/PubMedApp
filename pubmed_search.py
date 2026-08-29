@@ -48,15 +48,6 @@ def search_publications(author_name, orcid):
     pmids = record["IdList"]
     
     ### Retrieve Publication Information from PubMed
-    
-    handle = Entrez.efetch(
-        db="pubmed",
-        id=pmids,
-        rettype="medline",
-        retmode="text"
-    )
-
-    records = Medline.parse(handle)
 
     handle = Entrez.efetch(
         db="pubmed",
@@ -169,7 +160,7 @@ def search_publications(author_name, orcid):
         suffixes=("_pubmed", "_orcid")
     )
 
-    merged_df["Source"] = merged_df["_merge"].replace({
+    merged_df["Source"] = merged_df["_merge"].astype(str).map({
         "left_only": "pubmed_df",
         "right_only": "orcid_df",
         "both": "both"
@@ -188,15 +179,4 @@ def search_publications(author_name, orcid):
     ).reset_index(drop=True)
         
     return merged_df
-
-
-# In[3]:
-
-
-# df = search_publications(
-#    "Tuan, WJ",
-#    "0000-0003-3939-8979"
-# )
-
-# df.head()
 
