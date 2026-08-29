@@ -1,7 +1,7 @@
 streamlit
 pandas
 datetime
-biopython>=1.85
+biopython
 io
 requests
 openpyxl
