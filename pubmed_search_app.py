@@ -18,6 +18,7 @@ import pandas as pd
 from io import BytesIO
 from datetime import datetime
 import streamlit as st
+import re
 from pubmed_search import search_publications
 
 import warnings
@@ -29,14 +30,18 @@ warnings.filterwarnings('ignore')
 # In[ ]:
 
 
+# Page Title
 st.title("PubMed and ORCID Publication Extractor")
 
+# User Input
 author_name = st.text_input(
-    "Author Name"
+    "Author Name",
+    placeholder="Tuan, WJ"
 )
 
 orcid = st.text_input(
-    "ORCID"
+    "ORCID",
+    placeholder="0000-0003-3939-8979"
 )
 
 # Function to create Excel file in memory
@@ -49,35 +54,82 @@ def create_excel(df):
 
     return output.getvalue()
 
-
+# Search Button
 if st.button("Search"):
 
-    results = search_publications(
-        author_name,
-        orcid
-    )
+    # Remove leading/trailing spaces
+    author_name = author_name.strip()
+    orcid = orcid.strip()
 
-    st.dataframe(results)
+    # ORCID validation pattern
+    orcid_pattern = r"^\d{4}-\d{4}-\d{4}-\d{4}$"
 
-    # Create filename
-    today = datetime.today().strftime("%Y%m%d")
+    # Input validation
+    if not author_name and not orcid:
 
-    safe_author = (
-        author_name.replace(", ", "_")
-                   .replace(",", "_")
-                   .replace(" ", "_")
-    )
+        st.error(
+            "Please enter both Author Name and ORCID."
+        )
 
-    filename = f"publication_{safe_author}_{today}.xlsx"
+    elif not author_name:
 
-    # Create Excel file
-    excel_data = create_excel(results)
+        st.error(
+            "Please enter Author Name."
+        )
 
-    # Download button
-    st.download_button(
-        label="📥 Download Excel File",
-        data=excel_data,
-        file_name=filename,
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+    elif not orcid:
+
+        st.error(
+            "Please enter ORCID."
+        )
+
+    elif not re.match(orcid_pattern, orcid):
+
+        st.error(
+            "ORCID must be in the format: 0000-0000-0000-0000"
+        )
+
+    else:
+
+        with st.spinner(
+            "Searching PubMed and ORCID..."
+        ):
+
+            results = search_publications(
+                author_name,
+                orcid
+            )
+
+        st.success(
+            f"Found {len(results)} publication records."
+        )
+
+        st.dataframe(
+            results,
+            use_container_width=True
+        )
+
+        # Create file name
+        today = datetime.today().strftime("%Y%m%d")
+
+        safe_author = (
+            author_name.replace(", ", "_")
+                       .replace(",", "_")
+                       .replace(" ", "_")
+        )
+
+        filename = (
+            f"publication_{safe_author}_{today}.xlsx"
+        )
+
+        # Create Excel file
+        excel_data = create_excel(results)
+
+        # Download button
+        st.download_button(
+            label="📥 Download Excel File",
+            data=excel_data,
+            file_name=filename,
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
