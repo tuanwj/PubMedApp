@@ -8,4 +8,4 @@ The application identifies publications that appear in both databases, as well a
 
 To perform the search, users must enter both the author's name and a valid ORCID identifier. Results are displayed in an interactive table and can be downloaded as an Excel file.
 
-Access the web app at https://pubmedapp-bk43v7egdynn8qrqqonsmn.streamlit.app/
+Access the web app at https://pubmedapp-bk43v7egdynn8qrqqonsmn.streamlit.app
