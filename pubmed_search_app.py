@@ -33,6 +33,23 @@ warnings.filterwarnings('ignore')
 # Page Title
 st.title("PubMed and ORCID Publication Extractor")
 
+st.markdown("""
+### Purpose of the Application
+
+Maintaining accurate publication records across multiple scholarly databases is important for researchers, institutions, and funding agencies. This application retrieves publication information from **PubMed** and **ORCID** for a specified author and compares the records from both sources.
+
+The application identifies:
+
+- Publications found in both PubMed and ORCID
+- Publications found only in PubMed
+- Publications found only in ORCID
+- Potential discrepancies between the two sources
+
+These comparisons can help researchers verify the completeness of their ORCID profiles, identify missing publications, and improve the accuracy of their academic records.
+
+**To perform a search, users must enter both the author's name and a valid ORCID identifier.** Results are displayed in an interactive table and can be downloaded as an Excel file for further review and analysis.
+""")
+
 # User Input
 author_name = st.text_input(
     "Author Name",
