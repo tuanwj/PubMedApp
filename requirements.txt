@@ -1,0 +1,8 @@
+streamlit
+pandas
+datetime
+biopython>=1.85
+io
+requests
+openpyxl
+pubmed_search
